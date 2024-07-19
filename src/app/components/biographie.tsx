@@ -1,38 +1,55 @@
 "use client";
 import { useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import { delay, motion, useInView } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { FaDownload, FaEnvelope } from "react-icons/fa";
 import { TextSplit } from "./textSplit";
-
+import MagneticButton from "./magneticButton";
 
 export default function Biographie() {
+  const imgAnimation = {
+    hidden: {
+      clipPath: "polygon(0% 0%, 0% 0%, 0% 100%, 0% 100%)",
+    },
+    visible: {
+      clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
+      transition: {
+        duration: 1,
+        delay: 0.2,
+        ease: "easeInOut",
+      },
+    },
+  };
 
   const bioRef = useRef(null);
-  const isBioRefInView = useInView(bioRef, { margin: "-100px" });
+  const isBioRefInView = useInView(bioRef, { margin: "-100px", once: true });
+
+  const bioRefAnimation = useRef(null);
+  const isBioRefAnimationInView = useInView(bioRefAnimation, { margin: "-100px" });
 
   return (
-    <section className="relative flex flex-col gap-20 justify-center items-center">
-              <motion.div ref={bioRef} className="flex items-baseline justify-start gap-4 overflow-hidden w-full" style={{ position: 'relative' }} >
-                <motion.h1
-                  initial={{ opacity: 0, x: "-100%" }}
-                  animate={
-                    isBioRefInView
-                      ? { opacity: 1, x: 0 }
-                      : { opacity: 0, x: "-100%" }
-                  }
-                  transition={{ duration: 0.5, delay: 0.2 }}
-                  className="text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-extrabold text-slate-950 dark:text-white uppercase font-serif mb-1"
-                >
-                  01
-                </motion.h1>
+    <motion.section ref={bioRefAnimation} className="relative flex flex-col gap-20 justify-center items-center">
+      <motion.div
+        ref={bioRef}
+        className="flex items-baseline justify-start gap-4 overflow-hidden w-full"
+        style={{ position: "relative" }}
+      >
+        <motion.h1
+          initial={{ opacity: 0, x: "-100%" }}
+          animate={
+            isBioRefInView ? { opacity: 1, x: 0 } : { opacity: 0, x: "-100%" }
+          }
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-extrabold text-slate-950 dark:text-white uppercase font-serif mb-1"
+        >
+          01
+        </motion.h1>
 
-                <h2 className="text-lg md:text-xl font-normal border-collapse border-y-2 border-indigo-500 text-black dark:text-slate-200 uppercase">
-                  Biographie
-                </h2>
-              </motion.div>
-
+        <h2 className="text-lg md:text-xl font-normal border-collapse border-y-2 border-indigo-500 text-black dark:text-slate-200 uppercase">
+          Biographie
+        </h2>
+      </motion.div>
 
       <TextSplit
         stagger={0.02}
@@ -41,7 +58,13 @@ export default function Biographie() {
         texte="Je suis un développeur web full stack passionné par la création de sites web et d'applications web. J'ai une expérience de plus de 5 ans dans le développement web. J'ai travaillé sur des projets allant de simples sites web à des applications web complexes. J'ai une solide expérience dans le développement de sites web responsives, de sites web e-commerce et d'applications web personnalisées."
       />
 
-      <div className="relative w-full bg-slate-950 dark:bg-white rounded-lg flex max-lg:flex-col items-center flex-wrap gap-12 shadow-md hover:shadow-lg transition-shadow duration-300 p-4">
+      <motion.div
+      
+        variants={imgAnimation}
+        initial="hidden"
+        animate={isBioRefAnimationInView ? "visible" : "hidden"}
+        className="relative w-full bg-slate-950 dark:bg-white rounded-lg flex max-lg:flex-col items-center flex-wrap gap-12 shadow-md hover:shadow-lg transition-shadow duration-300 p-4"
+      >
         <div className="flex flex-col gap-4 text-base lg:text-lg flex-[2]">
           <div className="grid grid-cols-2 items-center gap-4 md:gap-10 w-full h-full">
             <p className="font-medium text-white dark:text-black">
@@ -50,9 +73,7 @@ export default function Biographie() {
               </span>
               Prénom:
             </p>
-            <p className="text-indigo-400 dark:text-black">
-              Franck Chapelon
-            </p>
+            <p className="text-indigo-400 dark:text-black">Franck Chapelon</p>
           </div>
           <div className="grid grid-cols-2 items-center gap-4 md:gap-10">
             <p className="font-medium text-white dark:text-black">
@@ -79,9 +100,7 @@ export default function Biographie() {
               </span>
               Emplacement:
             </p>
-            <p className="text-indigo-400 dark:text-black">
-              Dordogne, France
-            </p>
+            <p className="text-indigo-400 dark:text-black">Dordogne, France</p>
           </div>
           <div className="grid grid-cols-2 items-center gap-4 md:gap-10 relative group">
             <p className="font-medium text-white dark:text-black">
@@ -108,36 +127,41 @@ export default function Biographie() {
             className="object-cover rounded-full aspect-square"
           />
         </div>
-      </div>
+      </motion.div>
       <q className=" font-normal text-slate-950 dark:text-indigo-500">
-        Programmeur : Une machine qui transforme le café&#9749; en code&#128187;. 
+        Programmeur : Une machine qui transforme le café&#9749; en
+        code&#128187;.
       </q>
 
-<div className="flex gap-8">
-      <Link href="/img/CV.pdf" target="_blank" download="CV_Franck_Chapelon.pdf">
-        <motion.button
-          whileHover={{ scale: 1.1 }}
-          className="rounded-full bg-indigo-700 px-6 py-2 text-sm md:text-base font-medium text-white flex items-center justify-center gap-2 group overflow-hidden "
-          transition={{ type: "spring", stiffness: 400, damping: 10 }}
-          key="unique-key-button"
+      <div className="flex flex-wrap gap-8">
+        <Link
+          href="/img/CV.pdf"
+          target="_blank"
+          download="CV_Franck_Chapelon.pdf"
         >
-          Télécharger mon CV
-          <FaDownload className="text-sm md:text-base transition-all duration-300 translate-x-10 group-hover:translate-x-0" />
-        </motion.button>
-      </Link>
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            className="rounded-full bg-indigo-700 px-6 py-2 text-sm md:text-base font-medium text-white flex items-center justify-center gap-2 group overflow-hidden "
+            transition={{ type: "spring", stiffness: 400, damping: 10 }}
+            key="unique-key-button"
+          >
+            Télécharger mon CV
+            <FaDownload className="text-sm md:text-base transition-all duration-300 translate-x-10 group-hover:translate-x-0" />
+          </motion.button>
+        </Link>
 
-      <Link href="/contact">
-        <motion.button
-          whileHover={{ scale: 1.1 }}
-          className="rounded-full bg-indigo-700 px-6 py-2 text-sm md:text-base font-medium text-white flex items-center justify-center gap-2 group overflow-hidden "
-          transition={{ type: "spring", stiffness: 400, damping: 10 }}
-          key="unique-key-button"
-        >
-          Me contacter
-          <FaEnvelope className="text-sm md:text-base transition-all duration-300 translate-x-10 group-hover:translate-x-0" />
-        </motion.button>
+        <Link href="/contact">
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            className="rounded-full bg-indigo-700 px-6 py-2 text-sm md:text-base font-medium text-white flex items-center justify-center gap-2 group overflow-hidden "
+            transition={{ type: "spring", stiffness: 400, damping: 10 }}
+            key="unique-key-button"
+          >
+            Me contacter
+            <FaEnvelope className="text-sm md:text-base transition-all duration-300 -translate-x-4 opacity-0 group-hover:translate-x-0 group-hover:opacity-100" />
+          </motion.button>
         </Link>
       </div>
-    </section>
+    </motion.section>
   );
 }

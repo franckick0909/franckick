@@ -5,7 +5,6 @@ import { AnimatedText } from "../components/animatedText";
 import { motion } from "framer-motion";
 import { LetterSplit2 } from "../components/letterSplit2";
 import PhraseSplit from "../components/phraseSplit";
-import MagneticButton from "../components/magneticButton";
 
 
 export default function Hero() {
@@ -68,7 +67,7 @@ export default function Hero() {
                 className="text-slate-950 dark:text-slate-300 overflow-hidden font-semibold text-5xl uppercase max-w-[28rem]"
                 delay={0.01}
               />
-              <MagneticButton btnText="React Freelance" />
+          
             </div>
           </div>
         </div>

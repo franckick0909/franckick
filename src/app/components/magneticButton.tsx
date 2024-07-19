@@ -7,7 +7,7 @@ interface Position {
     y: number;
 }
 
-export default function MagneticButton( {btnText}: {btnText: string}) {
+export default function MagneticButton( {btnText, className}: {btnText: string, className: string}) {
 
     const ref = useRef<HTMLButtonElement>(null);
     const [position, setPosition] = useState<Position>({ x: 0, y: 0 });
@@ -34,7 +34,7 @@ export default function MagneticButton( {btnText}: {btnText: string}) {
             onMouseLeave={reset}
             animate={{ x, y }}
             transition={{ type: "spring", stiffness: 150, damping: 15, mass: 0.1 }}
-            className='relative rounded-xl bg-red-500 px-6 py-2 text-sm font-medium text-white'
+            className={`relative px-6 py-2 text-sm font-medium text-white ${className}`}
         >
             {btnText}
         </motion.button>

@@ -7,7 +7,6 @@ import { motion } from "framer-motion";
 import { SvgScroll } from "../components/svgScroll";
 import Timeline from "../components/timeline";
 import { AnimatedText } from "../components/animatedText";
-import Link from "next/link";
 
 export default function About() {
   return (
